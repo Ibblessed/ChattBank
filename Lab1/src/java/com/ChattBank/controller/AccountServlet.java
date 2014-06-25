@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -57,11 +58,14 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
         
         if (action == null){
             request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
-        }else if (action.equals("search")){
+        }else if (action.equals("view")){
+            String id = request.getParameter("id");
+            request.setAttribute("id", id);
             request.getRequestDispatcher("/accountLookup.jsp").forward(request, response);
         }
     }
@@ -77,7 +81,14 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        String custId = request.getParameter("custID");
+        
+        if(action == null){
+            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
+        }else if (action.equals("getAccts")){
+            request.getRequestDispatcher("/accounts.jsp").forward(request, response);
+        }
     }
 
     /**

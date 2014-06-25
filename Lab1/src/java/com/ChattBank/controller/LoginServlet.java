@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.ChattBank.controller;
 
+import com.ChattBank.business.Customer;
 import com.ChattBank.business.User;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -37,7 +39,7 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");            
+            out.println("<title>Servlet LoginServlet</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
@@ -62,14 +64,14 @@ public class LoginServlet extends HttpServlet {
         String id = "";
         String password = "";
         String message = "";
-        
-        if (action == null){
+
+        if (action == null) {
             request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
-        }else if (action.equals("login")){
+        } else if (action.equals("login")) {
             request.setAttribute("id", id);
             request.setAttribute("password", password);
             request.setAttribute("message", message);
-            
+
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
@@ -85,31 +87,35 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         String action = request.getParameter("action");
-        
-        if(action == null){
+
+        if (action == null) {
             request.getRequestDispatcher("/Welcome.jsp");
-        }else if(action.equals("doLogin")){
+        } else if (action.equals("doLogin")) {
             String id = request.getParameter("id");
             String password = request.getParameter("password");
             String emptyPassword = "";
-            
+
             request.setAttribute("id", id);
             request.setAttribute("password", emptyPassword);
-            
-            User user = new User();            
-            boolean yes_no = user.validateUser(id, password);
-            
-            if(yes_no == true){
-                request.setAttribute("message", user.getMessage());
-                request.getRequestDispatcher("/welcomeUsers.jsp").forward(request, response);
-                System.out.println(yes_no);
-                System.out.println(user.getMessage());
-            }else{
-                request.setAttribute("message", user.getMessage());
-                request.getRequestDispatcher("/login.jsp").forward(request, response);
-                System.out.println(yes_no);
-                System.out.println(user.getMessage());
+
+            try {
+                Customer customer = new Customer();
+                customer.findDB(id);
+
+                if (customer.login(password)) {
+                    session.setAttribute("id", id);
+                    request.setAttribute("message", customer.getMessage());
+                    request.getRequestDispatcher("/welcomeUsers.jsp").forward(request, response);
+                    System.out.println("Customer found");
+                } else {
+                    request.setAttribute("message", customer.getMessage());
+                    request.getRequestDispatcher("/login.jsp").forward(request, response);
+                    System.out.println("Customer Not Logged In");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error: " + e);
             }
         }
     }

@@ -18,7 +18,7 @@
         </div>
         <div id = "userText">
             <article><%= request.getAttribute("message") %></article>
-            <article><a href = "AccountServlet?action=search">To Search Accounts Click Here:</a></article>
+            <article><a href = "AccountServlet?action=view&id=<%= request.getAttribute("id") %>">To View Accounts Click Here:</a></article>
         </div>
     </body>
 </html>

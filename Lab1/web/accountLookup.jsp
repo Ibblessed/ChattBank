@@ -46,7 +46,7 @@
             <img src="images/bankimage.jpg"/>
         </div>
         <div id="acctForm">
-            <form name="acctSearch" action="AccountServlet" method="POST" onsubmit="validateAccount();">
+            <form name="acctSearch" action="AccountServlet?action=getAccts" method="POST" onsubmit="validateAccount();">
                 <table id="acctTable" border="0" width="5" cellspacing="5" cellpadding="5">
                     <thead>
                         <tr>
@@ -55,20 +55,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Account Number</td>
-                            <td><input type="number" name="acctNumber" value="" size="25" /></td>
-                        </tr>
-                        <tr>
                             <td>Customer I.D.</td>
-                            <td><input type="text" name="custID" value="" size="25" /></td>
-                        </tr>
-                        <tr>
-                            <td>Type</td>
-                            <td><input type="text" name="type" value="" size="25" /></td>
-                        </tr>
-                        <tr>
-                            <td>Balance</td>
-                            <td><input type="text" name="balance" value="" size="25" /></td>
+                            <td><input type="text" name="custID" value="<%= request.getAttribute("id") %>" /></td>
                         </tr>
                     </tbody>
                 </table>
