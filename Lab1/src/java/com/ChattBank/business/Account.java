@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  *
- * @author AARONS
+ * @author Richard Davy
  */
 public class Account {
 
@@ -23,15 +23,15 @@ public class Account {
     private String acctType;
     private double balance;
 
-    Account() {
+    public Account() {
 
     }
 
-    public Account(String acctNo) throws SQLException {
+    public Account(String acct) throws SQLException {
         Connection connect = null;
         Statement statement = null;
         ResultSet result = null;
-        String sql = "SELECT * FROM Accounts WHERE acctNo = '" + acctNo + "';";
+        String sql = "SELECT * FROM Accounts WHERE acctNo = '" + acct + "';";
 
         try {
             connect = acctConnect();
@@ -83,6 +83,10 @@ public class Account {
         return balance;
     }
 
+    public String getAcct() {
+        return this.acctNo + " " + this.custId + " " + this.acctType + " " + this.balance;
+    }
+
     public static Connection acctConnect() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -122,24 +126,96 @@ public class Account {
             connect.close();
         }
     }
-    
-    //Testing purposes for the Account Class
-    /*public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        Account acct = null;
-        System.out.println("Please Enter Your User Account Number.");
-        String acctNumber = input.nextLine();
 
-        try {
-            acct = new Account(acctNumber);
-        } catch (SQLException e) {
-            System.out.println("Error: " + e);
+    public void deposit(String acctNo, double depAmount) throws SQLException {
+        Connection connect = acctConnect();
+        Statement statement = connect.createStatement();
+        ResultSet result = null;
+        String sql = "Select balance From Accounts Where acctNO = '" + acctNo + "';";
+        String update = null;
+        int updateSet = 0;
+        double balance = 0.00;
+        double newBalance;
+
+        result = statement.executeQuery(sql);
+        while (result.next()) {
+            balance = result.getDouble("Balance");
         }
 
-        System.out.println("Account Number: " + acct.getAcctNo());
-        System.out.println("Customer Id: " + acct.getCustId());
-        System.out.println("Account Type: " + acct.getAcctType());
-        System.out.println("Balance: " + acct.getBalance());
+        newBalance = balance + depAmount;
+        update = "Update Accounts Set Balance = '" + newBalance + "' Where acctNO = '" + acctNo + "';";
+        updateSet = statement.executeUpdate(update);
 
-    }*/
+        connect.close();
+    }
+
+    public void withdraw(String acctNo, double withdrawal) throws SQLException {
+
+        Connection connect = acctConnect();
+        Statement statement = connect.createStatement();
+        ResultSet result = null;
+        String sql = "Select balance From Accounts Where acctNO = '" + acctNo + "';";
+        String update = null;
+        int updateSet = 0;
+        double balance = 0.00;
+        double newBalance;
+
+        result = statement.executeQuery(sql);
+        while (result.next()) {
+            balance = result.getDouble("Balance");
+        }
+
+        newBalance = balance - withdrawal;
+        update = "Update Accounts Set Balance = '" + newBalance + "' Where acctNo = '" + acctNo + "';";
+        updateSet = statement.executeUpdate(update);
+        System.out.println("Update Success: " + updateSet);
+        connect.close();
+    }
+
+    public void transfer(String fromAcct, String toAcct, double transfer) throws SQLException {
+        withdraw(fromAcct, transfer);
+        deposit(toAcct, transfer);
+    }
+
+    public void estabAccount(String acctNo, String custID, String type, double balance) throws SQLException {
+        Connection connect = acctConnect();
+        Statement statement = connect.createStatement();
+        int result = 0;
+        String sql = "Insert Into accounts (acctNO, Cid, acctType, Balance) Values ('" + acctNo + "', " + custID + "', " + type + "', " + balance + "');";
+
+        result = statement.executeUpdate(sql);
+        connect.close();
+
+    }
+
+    //Testing purposes for the Account Class
+//    public static void main(String[] args) {
+//        Scanner input = new Scanner(System.in);
+//        Account fromAcct1 = null;
+//        Account toAccount1 = null;
+//        System.out.println("Please Enter The Account Number You Wish To Transfer From");
+//        String acctNumber = input.nextLine();
+//        System.out.println("Please Enter The Acct Number You Wish To Transfer To");
+//        String acctNumber2 = input.nextLine();
+//        System.out.println("Please Enter The Amount You Wish To Transfer");
+//        double transfer = input.nextDouble();
+//
+//        try {
+//            fromAcct1 = new Account(acctNumber);
+//            toAccount1 = new Account(acctNumber2);
+//            System.out.println(fromAcct1.getBalance());
+//            System.out.println(toAccount1.getBalance());
+//            fromAcct1.transfer(acctNumber, acctNumber2, transfer);
+//            Account fromAcct = new Account(acctNumber);
+//            Account toAccount = new Account(acctNumber2);
+//            System.out.println(fromAcct.getBalance());
+//            System.out.println(toAccount.getBalance());
+//        } catch (SQLException e) {
+//            System.out.println("Error: " + e);
+//        }
+//
+//        System.out.println("From Account: " + fromAcct1.getAcct());
+//        System.out.println("To Account: " + toAccount1.getAcct());
+//
+//    }
 }

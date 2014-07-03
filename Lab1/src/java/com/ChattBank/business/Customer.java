@@ -11,7 +11,7 @@ import myLibraries.DataManager;
 
 /**
  *
- * @author AARONS
+ * @author Richard Davy
  */
 public class Customer {
 
@@ -79,13 +79,15 @@ public class Customer {
     public String getCustEmail() {
         return custEmail;
     }
-    
-    public String getMessage(){
+
+    public String getMessage() {
         return this.message;
     }
 
     public boolean login(String custPassword) throws SQLException {
         boolean yes_no = false;
+        System.out.println(custPassword + "cust Password");
+        System.out.println(this.custPassword + "db Password");
         if (custPassword.equals(this.custPassword)) {
             this.message = "Thank you, you are logged in.";
             yes_no = true;
@@ -177,38 +179,37 @@ public class Customer {
             con.close();
         }
     }
-    
+
     //Testing purposes for the Customer Class.
-    /*public static void main(String[] args) throws SQLException {
-        Customer customer = new Customer();
-
-        Scanner userLog = new Scanner(System.in);
-        System.out.print("Please Enter your user name: ");
-        String userName = userLog.nextLine();
-        System.out.print("Please Enter Your Password: ");
-        String passWord = userLog.nextLine();
-        try {
-            customer.findDB(userName);
-        } catch (SQLException e) {
-            System.out.println("Errors: " + e);
-        }
-
-        if (customer.login(passWord) == true) {
-            System.out.println("Customer Id: " + customer.getCustId());
-            System.out.println("Customer Password is: " + customer.getCustPassword());
-            System.out.println("Customer Name: " + customer.getCustFirstName() + " " + customer.getCustLastName());
-            System.out.println("Customer Address Is: " + customer.getCustAddress());
-            System.out.println("Customer Email: " + customer.getCustEmail());
-
-            try {
-                customer.insertDB("3000", "4273", "Richard", "Davy", "White", "RichardDavy42@gmail.com");
-                customer.deleteDB("3000");
-            } catch (SQLException e) {
-                System.out.println("Errors: " + e);
-            }
-        } else {
-            System.out.println("Sorry Your Login Information Seems To Be Incorrect!");
-        }
-    }*/
-
+//    public static void main(String[] args) throws SQLException {
+//     Customer customer = new Customer();
+//
+//     Scanner userLog = new Scanner(System.in);
+//     System.out.print("Please Enter your user name: ");
+//     String userName = userLog.nextLine();
+//     System.out.print("Please Enter Your Password: ");
+//     String passWord = userLog.nextLine();
+//     try {
+//     customer.findDB(userName);
+//     } catch (SQLException e) {
+//     System.out.println("Errors: " + e);
+//     }
+//
+//     if (customer.login(passWord) == true) {
+//     System.out.println("Customer Id: " + customer.getCustId());
+//     System.out.println("Customer Password is: " + customer.getCustPassword());
+//     System.out.println("Customer Name: " + customer.getCustFirstName() + " " + customer.getCustLastName());
+//     System.out.println("Customer Address Is: " + customer.getCustAddress());
+//     System.out.println("Customer Email: " + customer.getCustEmail());
+//
+//     try {
+//     customer.insertDB("3000", "4273", "Richard", "Davy", "White", "RichardDavy42@gmail.com");
+//     customer.deleteDB("3000");
+//     } catch (SQLException e) {
+//     System.out.println("Errors: " + e);
+//     }
+//     } else {
+//     System.out.println("Sorry Your Login Information Seems To Be Incorrect!");
+//     }
+//     }
 }

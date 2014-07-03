@@ -8,6 +8,22 @@
         <servlet-name>AccountServlet</servlet-name>
         <servlet-class>com.ChattBank.controller.AccountServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AccountsServlet</servlet-name>
+        <servlet-class>com.ChattBank.controller.AccountsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>com.ChattBank.controller.Logout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AccountLookupServlet</servlet-name>
+        <servlet-class>com.ChattBank.controller.AccountLookupServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ManageAccounts</servlet-name>
+        <servlet-class>com.ChattBank.controller.ManageAccounts</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -15,6 +31,22 @@
     <servlet-mapping>
         <servlet-name>AccountServlet</servlet-name>
         <url-pattern>/AccountServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountsServlet</servlet-name>
+        <url-pattern>/AccountsServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountLookupServlet</servlet-name>
+        <url-pattern>/AccountLookupServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ManageAccounts</servlet-name>
+        <url-pattern>/ManageAccounts</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

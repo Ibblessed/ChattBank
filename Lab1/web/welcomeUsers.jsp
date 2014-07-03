@@ -1,7 +1,7 @@
 <%-- 
     Document   : welcomeUsers
     Created on : Jun 19, 2014, 8:01:22 PM
-    Author     : AARONS
+    Author     : Richard Davy
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -17,8 +17,11 @@
             <img src="images/bankimage.jpg" />
         </div>
         <div id = "userText">
-            <article><%= request.getAttribute("message") %></article>
-            <article><a href = "AccountServlet?action=view&id=<%= request.getAttribute("id") %>">To View Accounts Click Here:</a></article>
+            <article><%= request.getAttribute("message")%></article>
+            <article><a href = "<%= response.encodeURL(request.getContextPath()) + "/AccountServlet?action=view&id=" + session.getAttribute("id")%>">To View All Accounts Click Here:</a></article>
+            <article>
+                <a href = "AccountServlet?action=search&id=<%= session.getAttribute("id")%>">Or Click Here To Search Accounts Independently</a>
+            </article>
         </div>
     </body>
 </html>

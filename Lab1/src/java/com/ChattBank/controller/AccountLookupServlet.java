@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.ChattBank.controller;
 
 import com.ChattBank.business.Account;
 import com.ChattBank.business.Accounts;
+import com.ChattBank.business.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -23,7 +25,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Richard Davy
  */
-public class AccountServlet extends HttpServlet {
+public class AccountLookupServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +44,10 @@ public class AccountServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AccountServlet</title>");
+            out.println("<title>Servlet AccountLookupServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AccountServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AccountLookupServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,49 +65,30 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         HttpSession session = request.getSession();
         session.setMaxInactiveInterval(-0);
-        Accounts acct = new Accounts();
-        ArrayList<Account> list = new ArrayList();
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        response.setHeader("Pragma", "no-cache");
-        response.setDateHeader("Expires", 0);
         String action = request.getParameter("action");
-
-        if (action == null) {
-            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
-        } else if (action.equals("view")) {
+        ArrayList<Account> accountList = new ArrayList();
+        
+        if (action.equals(null)) {
+            
+            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+        
+        } else if (action.equals("getAcct")) {
+            
+            String acctNo = request.getParameter("accountNo");
             
             try {
-                acct.setCustAccounts(request.getParameter("id"));
-                list.addAll(acct.getCustAccounts());
+            
+                Account account = new Account(acctNo);
+                session.setAttribute("account", account);
+                request.getRequestDispatcher("/accountView.jsp").forward(request, response);
+            
             } catch (SQLException ex) {
-                Logger.getLogger(Accounts.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AccountLookupServlet.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            session.setAttribute("acctList", list);
-            request.getRequestDispatcher("/accounts.jsp").forward(request, response);
-            acct.clearAccounts();
-        } else if (action.equals("search")) {
-            System.out.println(request.getParameter("id"));
-            try {
-                acct.setCustAccounts(request.getParameter("id"));
-                list.addAll(acct.getCustAccounts());
-                System.out.println(list.size());
-            } catch (SQLException ex) {
-                Logger.getLogger(Accounts.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            System.out.println("before 4 loop");
-            for (int i = 0; i < list.size(); i++) {
-
-                System.out.println("From JSP: " + list.get(i).getAcctNo());
-            }
-            System.out.println("after 4 loop");
-            session.setAttribute("acctList", list);
-            request.getRequestDispatcher("/accountLookup.jsp").forward(request, response);
-            acct.clearAccounts();
         }
-
     }
 
     /**
@@ -119,15 +102,7 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        response.setHeader("Pragma", "no-cache");
-        response.setDateHeader("Expires", 0);
-        String action = request.getParameter("action");
-        String custId = request.getParameter("custID");
-
-        if (action == null) {
-            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
-        }
+        doGet(request, response);
     }
 
     /**

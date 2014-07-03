@@ -8,7 +8,7 @@ package com.ChattBank.business;
 
 /**
  *
- * @author AARONS
+ * @author Richard Davy
  */
 public class User {
     

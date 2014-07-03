@@ -3,24 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.ChattBank.controller;
 
-import com.ChattBank.business.Customer;
-import com.ChattBank.business.User;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Richard Davy
  */
-public class LoginServlet extends HttpServlet {
+public class Logout extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +36,10 @@ public class LoginServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LoginServlet</title>");
+            out.println("<title>Servlet Logout</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LoginServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Logout at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,24 +57,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String action = request.getParameter("action");
-        String id = "";
-        String password = "";
-        String message = "";
-
-        if (action == null) {
-
-            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
-
-        } else if (action.equals("login")) {
-
-            request.setAttribute("id", id);
-            request.setAttribute("password", password);
-            request.setAttribute("message", message);
-
-            request.getRequestDispatcher("/login.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -91,48 +71,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        HttpSession session = request.getSession();
-        String action = request.getParameter("action");
-
-        if (action == null) {
-
-            request.getRequestDispatcher("/Welcome.jsp");
-
-        } else if (action.equals("doLogin")) {
-            System.out.println("You made it here!!!");
-            String id = request.getParameter("id");
-            String password = request.getParameter("password");
-            String emptyPassword = "";
-
-            session.setAttribute("id", id);
-            request.setAttribute("password", emptyPassword);
-            Customer customer = new Customer();
-           
-
-            try {
-                   
-                 customer.findDB(id);              
-
-                if (customer.login(password)) {
-
-                    session.setAttribute("customer", customer);
-
-                    request.setAttribute("message", customer.getMessage());
-                    request.getRequestDispatcher("/welcomeUsers.jsp").forward(request, response);
-                    System.out.println("Customer found");
-
-                } else {
-
-                    request.setAttribute("message", customer.getMessage());
-                    request.getRequestDispatcher("/login.jsp").forward(request, response);
-                    System.out.println("Customer Not Logged In");
-
-                }
-            } catch (SQLException e) {
-                System.out.println("Error: " + e);
-            }
-        }
+        processRequest(request, response);
     }
 
     /**

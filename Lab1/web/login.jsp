@@ -1,7 +1,7 @@
 <%-- 
     Document   : login.jsp
     Created on : Jun 12, 2014, 2:58:15 PM
-    Author     : AARONS
+    Author     : Richard Davy
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
