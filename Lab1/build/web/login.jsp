@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
@@ -16,14 +17,16 @@
                     font-family: sans-serif;
                 }
                 form, table{
-                    margin-left: 325px;
+                    margin-left: auto;
+                    margin-right: auto;
                     font-family:sans-serif;
                 }
                 #memberForm{
                     vertical-align: middle;
                 }
                 #submit{
-                    margin-left: 530px;
+                    margin-left: auto;
+                    margin-right: auto;
                 }
                 #image{
                     text-align: center;
@@ -83,7 +86,7 @@
             </article><br/><br/>
         </div>
         <div id="memberForm">
-            <h5 id = "errorMessage"><%= request.getAttribute("message") %></h5>
+            <h5 id = "errorMessage">${message}</h5>
             <form method="post" name = "login" action="LoginServlet">
                 <input type="hidden" name="action" value="doLogin" />
                 <p id = "errorMessage"></p>
@@ -97,11 +100,11 @@
                     <tbody>
                         <tr>
                             <td>User Name</td>                        
-                            <td colspan="2"><input type="text" name="id" value="<%= request.getAttribute("id")%>"  /></td>
+                            <td colspan="2"><input type="text" name="id" value="${csutomer.custId}"  /></td>
                         </tr>
                         <tr>
                             <td>Password</td>
-                            <td><input type="password" name="password" value="<%= request.getAttribute("password") %>" /></td>
+                            <td><input type="password" name="password" value="" /></td>
                         </tr>
                     </tbody>
                 </table>

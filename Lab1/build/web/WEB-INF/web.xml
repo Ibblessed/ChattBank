@@ -24,6 +24,14 @@
         <servlet-name>ManageAccounts</servlet-name>
         <servlet-class>com.ChattBank.controller.ManageAccounts</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Deposit</servlet-name>
+        <servlet-class>com.ChattBank.controller.Deposit</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Withdrawal</servlet-name>
+        <servlet-class>com.ChattBank.controller.Withdrawal</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -47,6 +55,14 @@
     <servlet-mapping>
         <servlet-name>ManageAccounts</servlet-name>
         <url-pattern>/ManageAccounts</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Deposit</servlet-name>
+        <url-pattern>/Deposit</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Withdrawal</servlet-name>
+        <url-pattern>/Withdrawal</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -6,11 +6,13 @@
 
 package com.ChattBank.business;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Richard Davy
  */
-public class User {
+public class User implements Serializable {
     
     private String id = "admin";
     private String password = "123";

@@ -11,19 +11,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Richard Davy
+ * @author AARONS
  */
-public class AccountServlet extends HttpServlet {
+public class Deposit extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +40,10 @@ public class AccountServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AccountServlet</title>");
+            out.println("<title>Servlet Deposit</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AccountServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Deposit at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +61,7 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doPost(request,response);
+        doPost(request, response);
     }
 
     /**
@@ -77,33 +75,64 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        HttpSession session = request.getSession();
-        String action = request.getParameter("action");
+        Account acct;
+        Accounts accts = new Accounts();
+        List accounts = new ArrayList();
+        List acctNos = new ArrayList();
+        String id = request.getParameter("id");
+        String acctNo = request.getParameter("acctNo");
+        String message = "";
+        double depAmt = new Double(request.getParameter("depAmt"));
 
-        if (action == null) {
+        try {
             
-            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
+            accts.setCustAccounts(id);
+            accounts.addAll(accts.getCustAccounts());
             
-        } else if (action.equals("view")) {
+            for (int i = 0; i < accounts.size(); i++) {
+                acct = (Account) accounts.get(i);
+                acctNos.add(acct.getAcctNo());
+            }
             
-            request.getRequestDispatcher("/accounts.jsp").forward(request, response);
+            if (!id.isEmpty() && acctNos.contains(acctNo) && depAmt > 0) {
+
+                acct = new Account(acctNo);
+                acct.deposit(acctNo, depAmt);
+                message = "Thank you Your deposit was successful. <br/> Your new balance for account " + acctNo + " is " + acct.getBalance() + ".";
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("/deposit.jsp").forward(request, response);
+                
+            }else if (!id.isEmpty() && acctNos.contains(acctNo) && depAmt <= 0) {
+                
+                message = "Sorry But You Can't Set A Deposit Amount less than or equal to zero!";
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("/deposit.jsp").forward(request, response);
+                
+            }else{
+                
+                message = "We're Sorry Something Went Wrong Please Try Again.";
+                request.setAttribute("message", message);
+                request.getRequestDispatcher("/deposit.jsp").forward(request, response);
+                
+            }
             
-        } else if (action.equals("search")) {
-            
-            request.getRequestDispatcher("/accountLookup.jsp").forward(request, response);
-            
+        }catch(SQLException ex){
+            log("Problem: " + ex + ".");
         }
+        
+        accounts.clear();
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
+        /**
+         * Returns a short description of the servlet.
+         *
+         * @return a String containing servlet description
+         */
+        @Override
+        public String getServletInfo
+        
+            () {
         return "Short description";
-    }// </editor-fold>
+        }// </editor-fold>
 
-}
+    }

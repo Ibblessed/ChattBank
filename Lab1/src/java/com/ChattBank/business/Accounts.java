@@ -6,6 +6,7 @@
 
 package com.ChattBank.business;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  *
  * @author Richard Davy
  */
-public class Accounts {
+public class Accounts implements Serializable {
     
     private static ArrayList<Account> custAccounts = new ArrayList();
     private String userID = "";

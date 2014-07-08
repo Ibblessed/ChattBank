@@ -9,14 +9,14 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Welcome</title>
-         <style>
-            #welcomeMessage{
-                text-align: center;
-                font-family: sans-serif;
-                font-size: medium;
-            }
-        </style>
+            <title>Welcome</title>
+            <style>
+                #welcomeMessage{
+                    text-align: center;
+                    font-family: sans-serif;
+                    font-size: medium;
+                }
+            </style>
     </head>
     <body>
         <div id="welcomeMessage">
@@ -30,6 +30,6 @@
             </article>
             <p><a href ="LoginServlet?action=login">Member Login Page</a></p>
         </div>
-        
+
     </body>
 </html>

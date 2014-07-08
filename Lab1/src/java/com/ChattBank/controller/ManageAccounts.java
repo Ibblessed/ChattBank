@@ -3,15 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.ChattBank.controller;
 
+import com.ChattBank.business.Account;
+import com.ChattBank.business.Accounts;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -36,7 +43,7 @@ public class ManageAccounts extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ManageAccounts</title>");            
+            out.println("<title>Servlet ManageAccounts</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ManageAccounts at " + request.getContextPath() + "</h1>");
@@ -57,7 +64,7 @@ public class ManageAccounts extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doPost(request, response);
     }
 
     /**
@@ -71,7 +78,35 @@ public class ManageAccounts extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+    
+        String action = request.getParameter("action");
+        String id = request.getParameter("id");
+        String message;
+
+        if (id.equals("") && action.equals("manage")) {
+
+            message = "Sorry Your Session Has Timed Out Please Login Again";
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+
+        } else if (!id.isEmpty() && action.equals("manage")) {
+            
+            request.getRequestDispatcher("/manageAccounts.jsp").forward(request, response);
+            
+        }else if (!id.isEmpty() && action.equals("Deposit")){
+                        
+            message = "Hi There Welcome To Mobile Deposit";
+            request.setAttribute("message", message);
+            request.getRequestDispatcher("/deposit.jsp").forward(request, response);
+            
+        }else if (!id.isEmpty() && action.equals("Withdraw")){
+            
+            message = "Hi There Welcome To Mobile Withdrawal";
+            request.setAttribute("message", message);           
+            request.getRequestDispatcher("/withdrawal.jsp").forward(request, response);
+            
+        }
+        
     }
 
     /**

@@ -65,30 +65,8 @@ public class AccountLookupServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        doPost(request,response);
         
-        HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(-0);
-        String action = request.getParameter("action");
-        ArrayList<Account> accountList = new ArrayList();
-        
-        if (action.equals(null)) {
-            
-            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
-        
-        } else if (action.equals("getAcct")) {
-            
-            String acctNo = request.getParameter("accountNo");
-            
-            try {
-            
-                Account account = new Account(acctNo);
-                session.setAttribute("account", account);
-                request.getRequestDispatcher("/accountView.jsp").forward(request, response);
-            
-            } catch (SQLException ex) {
-                Logger.getLogger(AccountLookupServlet.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }
 
     /**
@@ -102,7 +80,27 @@ public class AccountLookupServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        doGet(request, response);
+        
+        String action = request.getParameter("action");
+        
+        if (action.equals(null)) {
+            
+            request.getRequestDispatcher("/welcome.jsp").forward(request, response);
+        
+        } else if (action.equals("getAcct")) {
+            
+            String acctNo = request.getParameter("accountNo");
+            
+            try {
+            
+                Account account = new Account(acctNo);
+                request.setAttribute("account", account);
+                request.getRequestDispatcher("/accountView.jsp").forward(request, response);
+            
+            } catch (SQLException ex) {
+                Logger.getLogger(AccountLookupServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     /**

@@ -5,11 +5,15 @@
  */
 package com.ChattBank.controller;
 
+import com.ChattBank.business.Account;
+import com.ChattBank.business.Accounts;
 import com.ChattBank.business.Customer;
 import com.ChattBank.business.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +77,6 @@ public class LoginServlet extends HttpServlet {
         } else if (action.equals("login")) {
 
             request.setAttribute("id", id);
-            request.setAttribute("password", password);
             request.setAttribute("message", message);
 
             request.getRequestDispatcher("/login.jsp").forward(request, response);
@@ -94,29 +97,33 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         String action = request.getParameter("action");
+        List<Account> acctList = new ArrayList();
+        String id = null;
+        String password = "";
 
         if (action == null) {
 
             request.getRequestDispatcher("/Welcome.jsp");
 
         } else if (action.equals("doLogin")) {
-            System.out.println("You made it here!!!");
-            String id = request.getParameter("id");
-            String password = request.getParameter("password");
-            String emptyPassword = "";
+            
+            id = request.getParameter("id");
+            password = request.getParameter("password");
 
             session.setAttribute("id", id);
-            request.setAttribute("password", emptyPassword);
             Customer customer = new Customer();
-           
+            Accounts accounts = new Accounts();
 
             try {
                    
-                 customer.findDB(id);              
+                 customer.findDB(id);
+                 accounts.setCustAccounts(id);
+                 acctList.addAll(accounts.getCustAccounts());
 
                 if (customer.login(password)) {
 
                     session.setAttribute("customer", customer);
+                    session.setAttribute("acctList", acctList);
 
                     request.setAttribute("message", customer.getMessage());
                     request.getRequestDispatcher("/welcomeUsers.jsp").forward(request, response);
@@ -124,9 +131,10 @@ public class LoginServlet extends HttpServlet {
 
                 } else {
 
+                    id = request.getParameter("id");
+                    request.setAttribute("id", id);
                     request.setAttribute("message", customer.getMessage());
                     request.getRequestDispatcher("/login.jsp").forward(request, response);
-                    System.out.println("Customer Not Logged In");
 
                 }
             } catch (SQLException e) {

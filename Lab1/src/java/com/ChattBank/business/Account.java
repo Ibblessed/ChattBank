@@ -5,6 +5,7 @@
  */
 package com.ChattBank.business;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.util.Scanner;
  *
  * @author Richard Davy
  */
-public class Account {
+public class Account implements Serializable{
 
     private String acctNo;
     private String custId;
@@ -145,7 +146,8 @@ public class Account {
         newBalance = balance + depAmount;
         update = "Update Accounts Set Balance = '" + newBalance + "' Where acctNO = '" + acctNo + "';";
         updateSet = statement.executeUpdate(update);
-
+        this.balance = newBalance;
+        
         connect.close();
     }
 
@@ -169,6 +171,8 @@ public class Account {
         update = "Update Accounts Set Balance = '" + newBalance + "' Where acctNo = '" + acctNo + "';";
         updateSet = statement.executeUpdate(update);
         System.out.println("Update Success: " + updateSet);
+        this.balance = newBalance;
+        
         connect.close();
     }
 

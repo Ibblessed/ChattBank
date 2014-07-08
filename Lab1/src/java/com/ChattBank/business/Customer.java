@@ -5,6 +5,7 @@
  */
 package com.ChattBank.business;
 
+import java.io.Serializable;
 import java.sql.*;
 import java.util.Scanner;
 import myLibraries.DataManager;
@@ -13,7 +14,7 @@ import myLibraries.DataManager;
  *
  * @author Richard Davy
  */
-public class Customer {
+public class Customer implements Serializable {
 
     private String custId;
     private String custPassword;
