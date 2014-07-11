@@ -32,6 +32,10 @@
         <servlet-name>Withdrawal</servlet-name>
         <servlet-class>com.ChattBank.controller.Withdrawal</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Transfer</servlet-name>
+        <servlet-class>com.ChattBank.controller.Transfer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -63,6 +67,10 @@
     <servlet-mapping>
         <servlet-name>Withdrawal</servlet-name>
         <url-pattern>/Withdrawal</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Transfer</servlet-name>
+        <url-pattern>/Transfer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

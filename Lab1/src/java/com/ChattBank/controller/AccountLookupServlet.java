@@ -83,16 +83,22 @@ public class AccountLookupServlet extends HttpServlet {
         
         String action = request.getParameter("action");
         
+        /* Directs customer to welcome page if the action is null so that this page 
+        isn't landed on unintentionally */
         if (action.equals(null)) {
             
             request.getRequestDispatcher("/welcome.jsp").forward(request, response);
         
-        } else if (action.equals("getAcct")) {
+        } 
+        /* Gets single searched account from the accountLookup.jsp */
+        else if (action.equals("getAcct")) {
             
             String acctNo = request.getParameter("accountNo");
             
             try {
-            
+                
+                /* Instantiates a new Account class and sets it as a request attribute
+                for use in the accountView.jsp */
                 Account account = new Account(acctNo);
                 request.setAttribute("account", account);
                 request.getRequestDispatcher("/accountView.jsp").forward(request, response);

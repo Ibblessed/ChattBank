@@ -51,7 +51,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Specify An Amount: <input type="number" value="" name="withAmt" /></td>                                
+                                <td>Specify An Amount: <input type="text" value="" name="withAmt" /></td>                                
                             </tr>
                             <tr>
                                 <td><input type="submit" value="submit" /></td>

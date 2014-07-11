@@ -75,7 +75,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><a href="AccountServlet?action=search&id=${customer.custId}">Search Single Account</a></td>
+                    <td><a href="AccountServlet?action=view&id=${customer.custId}">View All Accounts</a></td>
                     <td><a href="ManageAccounts?action=manage&id=${customer.custId}">Manage Accounts</a></td>
                     <td><a href="Logout?action=logout">Log Out</a></td>
                 </tr>

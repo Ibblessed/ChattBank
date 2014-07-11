@@ -78,19 +78,23 @@ public class AccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        HttpSession session = request.getSession();
+        /*Gets the action from the url to determine the path of the page*/
         String action = request.getParameter("action");
-
+        
+        
         if (action == null) {
             
+            /*if null direct the page to the welcome page so that the user doesn't stumble here by accident*/
             request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
             
         } else if (action.equals("view")) {
             
+            /*If it equals to view we direct to the accounts.jsp to view all accounts*/
             request.getRequestDispatcher("/accounts.jsp").forward(request, response);
             
         } else if (action.equals("search")) {
             
+            /*if directed equals search we direct to the single account lookup page*/
             request.getRequestDispatcher("/accountLookup.jsp").forward(request, response);
             
         }

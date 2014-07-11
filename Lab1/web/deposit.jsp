@@ -51,7 +51,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Specify An Amount: <input type="number" value="" name="depAmt" /></td>                                
+                                <td>Specify An Amount: <input type="text" value="" name="depAmt" /></td>                                
                             </tr>
                             <tr>
                                 <td><input type="submit" value="submit" /></td>
@@ -68,7 +68,7 @@
                 <p>
                     <a href="AccountServlet?action=view&id=${customer.custId}">View All Accounts</a>&Tab;&Tab;&Tab;
                     <a href="ManageAccounts?action=manage&id=${customer.custId}">Manage Accounts</a>&Tab;&Tab;&Tab;
-                    <td><a href="Logout?action=logout">Log Out</a></td>
+                    <a href="Logout?action=logout">Log Out</a>
                 </p>
             </article>
         </div>    

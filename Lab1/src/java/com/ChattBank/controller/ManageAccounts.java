@@ -78,32 +78,50 @@ public class ManageAccounts extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
+        
+        /*Set variables by requesting parameters from url*/
         String action = request.getParameter("action");
         String id = request.getParameter("id");
         String message;
 
+        /*If the id is empty at this point the customer is redirected 
+        to the login page and notified that their session has timed out*/
         if (id.equals("") && action.equals("manage")) {
 
             message = "Sorry Your Session Has Timed Out Please Login Again";
             request.setAttribute("message", message);
             request.getRequestDispatcher("/login.jsp").forward(request, response);
 
-        } else if (!id.isEmpty() && action.equals("manage")) {
+        } 
+        /*If id is not empty the customer is redirected to the manage accounts
+        jsp so that they can select which action to take */
+        else if (!id.isEmpty() && action.equals("manage")) {
             
             request.getRequestDispatcher("/manageAccounts.jsp").forward(request, response);
             
-        }else if (!id.isEmpty() && action.equals("Deposit")){
+        }
+        /*If the action is a deposit then the customer is redirected to the deposit form*/
+        else if (!id.isEmpty() && action.equals("Deposit")){
                         
             message = "Hi There Welcome To Mobile Deposit";
             request.setAttribute("message", message);
             request.getRequestDispatcher("/deposit.jsp").forward(request, response);
             
-        }else if (!id.isEmpty() && action.equals("Withdraw")){
+        }
+        /*If the action is withdraw then the customer will be directed to the withdraw form*/
+        else if (!id.isEmpty() && action.equals("Withdraw")){
             
             message = "Hi There Welcome To Mobile Withdrawal";
             request.setAttribute("message", message);           
             request.getRequestDispatcher("/withdrawal.jsp").forward(request, response);
+            
+        }
+        /*If the action is transfer then the customer will be directed to the transfer form*/
+        else if (!id.isEmpty() && action.equals("Transfer")){
+            
+            message = "Hi There Welcome To Mobile Transfer";
+            request.setAttribute("message", message);           
+            request.getRequestDispatcher("/transfer.jsp").forward(request, response);
             
         }
         

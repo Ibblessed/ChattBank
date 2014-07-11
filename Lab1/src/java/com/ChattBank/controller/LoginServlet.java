@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -66,8 +68,9 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
-        String id = "";
+        String id = request.getParameter("id");
         String password = "";
+
         String message = "";
 
         if (action == null) {
@@ -101,36 +104,49 @@ public class LoginServlet extends HttpServlet {
         String id = null;
         String password = "";
 
+        session.setMaxInactiveInterval(-0);
+
+        /* If action equals null direct user to Welcome.jsp so that customers don't 
+         land here unintentionally */
         if (action == null) {
 
             request.getRequestDispatcher("/Welcome.jsp");
 
-        } else if (action.equals("doLogin")) {
-            
+        } /* If action equals doLogin collect parameters and validate the customers
+         id and password */ else if (action.equals("doLogin")) {
+
             id = request.getParameter("id");
             password = request.getParameter("password");
-
+            
+            /* Stores id in session attribute and use it to instantiate new customer
+            and accounts objects */
             session.setAttribute("id", id);
             Customer customer = new Customer();
             Accounts accounts = new Accounts();
 
             try {
-                   
-                 customer.findDB(id);
-                 accounts.setCustAccounts(id);
-                 acctList.addAll(accounts.getCustAccounts());
+                
+                /* set new customer information */
+                customer.findDB(id);
 
+                /* validates customer id with customer password to  */
                 if (customer.login(password)) {
+                    accounts.setCustAccounts(id);
+                    acctList.addAll(accounts.getCustAccounts());
 
+                    /* Store new customer and account list in session for use in the rest
+                     of the application */
                     session.setAttribute("customer", customer);
                     session.setAttribute("acctList", acctList);
-
+                    
+                    /* direct the user to welcome users jsp after  */
                     request.setAttribute("message", customer.getMessage());
                     request.getRequestDispatcher("/welcomeUsers.jsp").forward(request, response);
-                    System.out.println("Customer found");
 
                 } else {
-
+                    
+                    /* If user password and id do not match the systems return them to the 
+                    login page with an error message allowing them to attempt the login again. */
                     id = request.getParameter("id");
                     request.setAttribute("id", id);
                     request.setAttribute("message", customer.getMessage());
@@ -140,7 +156,10 @@ public class LoginServlet extends HttpServlet {
             } catch (SQLException e) {
                 System.out.println("Error: " + e);
             }
+        } else if (action.equals("newAcct")) {
+
         }
+
     }
 
     /**

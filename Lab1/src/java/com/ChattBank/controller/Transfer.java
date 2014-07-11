@@ -3,6 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.ChattBank.controller;
 
 import com.ChattBank.business.Account;
@@ -24,7 +25,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author AARONS
  */
-public class Withdrawal extends HttpServlet {
+public class Transfer extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,10 +44,10 @@ public class Withdrawal extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Withdrawal</title>");
+            out.println("<title>Servlet Transfer</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Withdrawal at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Transfer at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -79,39 +80,49 @@ public class Withdrawal extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        /*Set variables and retrieve parameters for the actions needed to be completed*/
         Account acct;
         Accounts accts = null;
         List accounts = new ArrayList();
-        List acctNos = new ArrayList();
         String id = request.getParameter("id");
-        String acctNo = request.getParameter("acctNo");
+        String from = request.getParameter("from");
+        String to = request.getParameter("to");
         String message = "";
-        double withAmt = new Double(request.getParameter("withAmt"));
-
-        try {
+        double tranAmt = new Double(request.getParameter("tranAmt"));
+        
+        try{
             
-            /*We want to ensure that the id is valid and the withdrawal amount is greater than zero*/
-            if (!id.isEmpty() && withAmt > 0) {
+            /*ensuring that the session hasn't expired and that the transfer amount is greater 
+            than zero*/
+            if (!id.isEmpty() && tranAmt > 0) {
+
+            
+                acct = new Account();
                 
-                /*Here we specify the account that we will be making the withdrawal from*/
-                acct = new Account(acctNo);
-                
-                /*In the Account withdraw method if the balance is less than that of the withdrawal we throw a new exception*/
+                /*try catch clause to handle insufficient funds*/
                 try {
-                    acct.withdraw(acctNo, withAmt);
+                    
+                    /*calling the transfer method to transfer the funds*/
+                    acct.transfer(from, to, tranAmt);
+                    
                 } catch (Exception ex) {
                     
-                    /*Here we handle that exception by returning to the withdrawal page and displaying an
-                    error message so that the customer understands that their funds were insufficient. */
-                    
-                    message = "We're Sorry But there seems to Have Been An Issue<br/>" + acct.getMessage();
+                    /*Here we catch a thrown exception for the transfer noting that the from account has insufficient
+                    funds if the customer is attempting a transfer of more than the account has available*/
+                    message = "We're Sorry but it Appears that the account you wish to transfer money from.<br/>"
+                            + "Contains insufficient funds for the transfer";
                     request.setAttribute("message", message);
-                    request.getRequestDispatcher("/withdrawal.jsp").forward(request, response);
+                    request.getRequestDispatcher("/transfer.jsp").forward(request, response);
                     
                 }
+            
+                /*set up accounts to get updated data for the customer*/                
+                Account fromAcct = new Account(from);
+                Account toAcct = new Account(to);
                 
-                /*Display that the withdrawal was successful and the newly updated balance*/
-                message = "Thank you Your Withdrawal was successful. <br/> Your new balance for account " + acctNo + " is " + acct.getBalance() + ".";
+                /*Set the message with the updated account balances*/
+                message = "Thank you Your Transfer was successful. <br/> Your new balance for account " + from + " is " + fromAcct.getBalance() + ".<br/>"
+                        + "And your new balance for account " + to + " is " + toAcct.getBalance() + ".<br/>";
                 request.setAttribute("message", message);
                 
                 /*This will clear the currently stored information in the business object Accounts and reset the list to the newly updated 
@@ -122,32 +133,29 @@ public class Withdrawal extends HttpServlet {
                 accounts.addAll(accts.getCustAccounts());
                 request.getSession().setAttribute("acctList",accounts);
                 
-                /*Forward back to the withdrawal page where the customer started we only do this after the session and the list
-                is updated so that the drop down list shows the new balances*/
-                request.getRequestDispatcher("/withdrawal.jsp").forward(request, response);
-
-            } 
-            /*If the withdrawal amount is less than 0 it is invalid*/
-            else if (!id.isEmpty() && withAmt <= 0) {
-
-                message = "Sorry But You Can't Set A Withdrawal Amount less than or equal to zero!";
+                /*forward the user back to the transfer page with the new data*/
+                request.getRequestDispatcher("/transfer.jsp").forward(request, response);
+                
+            }
+            /*If tranAmt is less than or equal to zero the customer is asked to enter a new amount*/
+            else if (!id.isEmpty() && tranAmt <= 0) {
+                
+                message = "Sorry But You Can't Set A Deposit Amount less than or equal to zero!";
                 request.setAttribute("message", message);
-                request.getRequestDispatcher("/withdrawal.jsp").forward(request, response);
-
-            } 
-            /*This message will appear if the id is empty indicating that the user got to this page improperly */
-            else {
-
+                request.getRequestDispatcher("/deposit.jsp").forward(request, response);
+                
+            }else{
+                
                 message = "We're Sorry Something Went Wrong Please Try Again.";
                 request.setAttribute("message", message);
-                request.getRequestDispatcher("/withdrawal.jsp").forward(request, response);
-
+                request.getRequestDispatcher("/deposit.jsp").forward(request, response);
+                
             }
-
-        } catch (SQLException ex) {
+            
+        }catch(SQLException ex){
             log("Problem: " + ex + ".");
         }
-
+        
     }
 
     /**

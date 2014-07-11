@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.ChattBank.controller;
 
+import com.ChattBank.business.Accounts;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -36,7 +36,7 @@ public class Logout extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Logout</title>");            
+            out.println("<title>Servlet Logout</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Logout at " + request.getContextPath() + "</h1>");
@@ -57,7 +57,7 @@ public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doPost(request, response);
     }
 
     /**
@@ -71,7 +71,18 @@ public class Logout extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+
+        if (action.equals("") || action.equals(null)) {
+            /*The only way this servlet is accessed is by a logout link so this should never happen*/
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        } else if (action.equals("logout")){
+            /*When the user logs out we invalidate the session and send them back to the home page*/
+            request.getSession().invalidate();
+            Accounts accts = new Accounts();
+            accts.clearAccounts();
+            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
+        }
     }
 
     /**

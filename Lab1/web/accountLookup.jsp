@@ -33,6 +33,9 @@
                     margin-right: auto;
                     margin-left: auto;
                 }
+                #nav{
+                    text-align: center;
+                }
             </style>
             <script type="text/javascript">
                 function validateAccount() {
@@ -79,31 +82,21 @@
                     </tr>
                     <tr>
                         <form method="post" action="AccountLookupServlet">
-                        <td></td>
-                        <td></td>
-                        <td><input type="submit" value="Submit" /></td>
+                            <td></td>
+                            <td></td>
+                            <td><input type="submit" value="Submit" /></td>
                         </form>
                     </tr>
                 </tbody>
             </table>
-            <table width="50%" cellspacing="5" cellpadding="2">
-            <thead>
-                <tr>
-
-                    <td></td>
-                    <td>Click Here To Navigate To A New Page</td>
-                    <td></td>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="AccountServlet?action=view&id=${customer.custId}">View All Accounts</a></td>
-                    <td><a href="ManageAccounts?action=manage&id=${customer.custId}">Manage Accounts</a></td>
-                    <td><a href="Logout?action=logout">Log Out</a></td>
-                </tr>
-            </tbody>
-        </table>        
+            <article id="nav">
+                <p>Click Here To Navigate To A New Page</p>
+                <p>
+                    <a href="AccountServlet?action=view&id=${customer.custId}">View All Accounts</a>&Tab;&Tab;&Tab;
+                    <a href="ManageAccounts?action=manage&id=${customer.custId}">Manage Accounts</a>&Tab;&Tab;&Tab;
+                    <a href="Logout?action=logout">Log Out</a>
+                </p>
+            </article>        
             </div>
     </body>
 </html>

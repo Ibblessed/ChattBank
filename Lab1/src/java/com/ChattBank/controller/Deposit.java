@@ -12,6 +12,8 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -75,40 +77,51 @@ public class Deposit extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
         Account acct;
-        Accounts accts = new Accounts();
+        Accounts accts = null;
         List accounts = new ArrayList();
-        List acctNos = new ArrayList();
         String id = request.getParameter("id");
         String acctNo = request.getParameter("acctNo");
         String message = "";
         double depAmt = new Double(request.getParameter("depAmt"));
+        
+        try{
+            
+            /* Ensure that the user has entered a deposited amount greater than 0 */
+            if (!id.isEmpty() && depAmt > 0) {
 
-        try {
-            
-            accts.setCustAccounts(id);
-            accounts.addAll(accts.getCustAccounts());
-            
-            for (int i = 0; i < accounts.size(); i++) {
-                acct = (Account) accounts.get(i);
-                acctNos.add(acct.getAcctNo());
-            }
-            
-            if (!id.isEmpty() && acctNos.contains(acctNo) && depAmt > 0) {
-
+                /* Establish account to be deposited to */
                 acct = new Account(acctNo);
                 acct.deposit(acctNo, depAmt);
+            
+                /* Set message for a successful deposit */
                 message = "Thank you Your deposit was successful. <br/> Your new balance for account " + acctNo + " is " + acct.getBalance() + ".";
                 request.setAttribute("message", message);
+                
+                /*This will clear the currently stored information in the business object Accounts and reset the list to the newly updated 
+                information*/
+                accts = new Accounts();
+                accts.clearAccounts();
+                accts.setCustAccounts(id);
+                accounts.addAll(accts.getCustAccounts());
+                request.getSession().setAttribute("acctList",accounts);
+                
+                /* forward back to the deposit.jsp with updated information */
                 request.getRequestDispatcher("/deposit.jsp").forward(request, response);
                 
-            }else if (!id.isEmpty() && acctNos.contains(acctNo) && depAmt <= 0) {
+            }
+            /* If the deposit amount is less than or equal to 0 return to the deposit page
+            with an error message */
+            else if (!id.isEmpty() && depAmt <= 0) {
                 
                 message = "Sorry But You Can't Set A Deposit Amount less than or equal to zero!";
                 request.setAttribute("message", message);
                 request.getRequestDispatcher("/deposit.jsp").forward(request, response);
                 
-            }else{
+            }
+            /* If id is empty and deposit amount is invalid */
+            else{
                 
                 message = "We're Sorry Something Went Wrong Please Try Again.";
                 request.setAttribute("message", message);
@@ -119,8 +132,6 @@ public class Deposit extends HttpServlet {
         }catch(SQLException ex){
             log("Problem: " + ex + ".");
         }
-        
-        accounts.clear();
     }
 
         /**

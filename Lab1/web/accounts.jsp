@@ -58,24 +58,13 @@
             </tbody>
         </table>
         <p>Thank you for your business!</p><br/><br/>
-        <table width="50%" cellspacing="5" cellpadding="2">
-            <thead>
-                <tr>
-
-                    <td></td>
-                    <td>Click Here To Navigate To A New Page</td>
-                    <td></td>
-
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><a href="AccountServlet?action=search&id=${customer.custId}">Search Single Account</a></td>
-                    <td><a href="ManageAccounts?action=manage&id=${customer.custId}">Manage Accounts</a></td>
-                    <td><a href="Logout?action=logout">Log Out</a></td>
-                </tr>
-            </tbody>
-        </table>        
+                <article>
+                    <p>Click Here To Navigate To A New Page</p>
+                 
+                    <p><a href="AccountServlet?action=search&id=${customer.custId}">Search Single Account</a>&Tab;&Tab;&Tab;
+                    <a href="ManageAccounts?action=manage&id=${customer.custId}">Manage Accounts</a>&Tab;&Tab;&Tab;
+                    <a href="Logout?action=logout">Log Out</a></p>
+                </article>        
 
     </body>
 </html>
