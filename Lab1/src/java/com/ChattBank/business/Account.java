@@ -322,13 +322,13 @@ public class Account implements Serializable{
      * @param balance
      * @throws SQLException
      */
-    public void estabAccount(String acctNo, String custID, String type, double balance) throws SQLException {
-        
+    public void estabAccount(String custID, String type, double balance) throws SQLException {
+        System.out.println(custID + " " + type + " " + balance);
         /* Establish connection and update the database with a new row containing the new account info */
         Connection connect = acctConnect();
         Statement statement = connect.createStatement();
-        String sql = "Insert Into accounts (acctNO, Cid, acctType, Balance) Values ('" + acctNo + "', " + custID + "', " + type + "', " + balance + "');";
-        
+        String sql = "Insert Into accounts (Cid, acctType, Balance) Values ('" + custID + "', '" + type + "', " + balance + ");";
+        System.out.println(sql);
         /* Execute Query and close connection */
         statement.executeUpdate(sql);
         connect.close();

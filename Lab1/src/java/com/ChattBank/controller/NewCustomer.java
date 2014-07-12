@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package com.ChattBank.controller;
 
-import com.ChattBank.business.Account;
-import com.ChattBank.business.Accounts;
+import com.ChattBank.business.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -21,9 +20,9 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Richard Davy
+ * @author AARONS
  */
-public class AccountServlet extends HttpServlet {
+public class NewCustomer extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +41,10 @@ public class AccountServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AccountServlet</title>");
+            out.println("<title>Servlet NewCustomer</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AccountServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewCustomer at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -77,53 +76,36 @@ public class AccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        /*Gets the action from the url to determine the path of the page*/
-        String action = request.getParameter("action");
-        String id = (String) request.getSession().getAttribute("id");
-        Accounts accts = new Accounts();
-        ArrayList<Account> accountList = new ArrayList();
-
-        try {
-            accts.setCustAccounts(id);
-            accountList.addAll(accts.getCustAccounts());
-        } catch (SQLException ex) {
-            log("!" + ex);
-        }
-        if (action == null) {
-
-            /*if null direct the page to the welcome page so that the user doesn't stumble here by accident*/
-            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
-
-        } else if (action.equals("view")) {
-
-            if (accountList.isEmpty()) {
-
-                /*If action is equal to view but no accounts are in the list we send the user to create an account*/
-                request.getRequestDispatcher("/noAccounts.jsp").forward(request, response);
-
-            } else {
-
-                /*If it equals to view we direct to the accounts.jsp to view all accounts*/
-                request.getRequestDispatcher("/accounts.jsp").forward(request, response);
-
+        
+        Customer customer = new Customer();
+        String password1 = request.getParameter("password1");
+        String password2 = request.getParameter("password2");
+        String firstName = request.getParameter("firstName");
+        String lastName = request.getParameter("lastName");
+        String address = request.getParameter("address");
+        String email = request.getParameter("email");
+        String message = "";
+        
+        if (password1.equals(password2)) {
+            
+            try {
+                customer.insertDB(password1, firstName, lastName, address, email);
+            } catch (SQLException ex) {
+                Logger.getLogger(NewCustomer.class.getName()).log(Level.SEVERE, null, ex);
+                request.getRequestDispatcher("error.jsp").forward(request, response);
             }
-
-        } else if (action.equals("search")) {
-
-            if (accountList.isEmpty()) {
-
-                /*If action is equal to view but no accounts are in the list we send the user to create an account*/
-                request.getRequestDispatcher("/noAccounts.jsp").forward(request, response);
-
-            } else {
-
-                /*if directed equals search we direct to the single account lookup page*/
-                request.getRequestDispatcher("/accountLookup.jsp").forward(request, response);
-
-            }
-
+            
+            request.getRequestDispatcher("login.jsp").forward(request,response);
+            
+        }else{
+        
+            message = "Sorry Your Passwords Don't Seem To Match";
+            request.getSession().setAttribute("message", message);
+            request.getRequestDispatcher("newCustomer.jsp").forward(request, response);
+            message = "";
+            request.getSession().setAttribute("message", message);
         }
+        
     }
 
     /**

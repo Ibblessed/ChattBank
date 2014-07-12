@@ -29,6 +29,9 @@
                 To continue to our member login page please click the link below.
             </article>
             <p><a href ="LoginServlet?action=login">Member Login Page</a></p>
+            <br/><br/>
+            <article><i>Not A Member With Us</i></article>
+            <p><a href='newCustomer.jsp'>Click Here</a></p>
         </div>
 
     </body>

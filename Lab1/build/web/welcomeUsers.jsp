@@ -23,6 +23,9 @@
             <article>
                 <a href = "AccountServlet?action=search&id=${customer.custId}">Or Click Here To Search Accounts Independently</a>
             </article>
+            <br/><br/>
+            <article><i>New Customer... Then You Need A New Account!</i></article>
+            <p><a href='newAccount.jsp'>Click Here</a></p>
         </div>
     </body>
 </html>

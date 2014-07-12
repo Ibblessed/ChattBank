@@ -7,8 +7,6 @@ package com.ChattBank.business;
 
 import java.io.Serializable;
 import java.sql.*;
-import java.util.Scanner;
-import myLibraries.DataManager;
 
 /**
  *
@@ -153,8 +151,8 @@ public class Customer implements Serializable {
      */
     public boolean login(String custPassword) throws SQLException {
         boolean yes_no = false;
-        System.out.println(custPassword + "cust Password");
-        System.out.println(this.custPassword + "db Password");
+        
+        /* Verify password against database password for the userId */
         if (custPassword.equals(this.custPassword)) {
             this.message = "Thank you, you are logged in.";
             yes_no = true;
@@ -162,6 +160,8 @@ public class Customer implements Serializable {
             this.message = "Sorry Your Login Information seems to be incorrect.";
             yes_no = false;
         }
+        
+        /* Returns true or false based on the condition statement above */
         return yes_no;
     }
 
@@ -229,12 +229,12 @@ public class Customer implements Serializable {
      * @param custEmail
      * @throws SQLException 
      */
-    public void insertDB(String custID, String custPassword, String custFirstName, String custLastName, String custAddress, String custEmail) throws SQLException {
+    public void insertDB(String custPassword, String custFirstName, String custLastName, String custAddress, String custEmail) throws SQLException {
         Connection con = custConnect();
         Statement statement;
         ResultSet result;
         int resultVal;
-        String sql = "INSERT INTO Customers (custID, custPassword, custFirstName, custLastName, custAddress, custEmail) VALUES ('" + custID + "','" + custPassword
+        String sql = "INSERT INTO Customers (custPassword, custFirstName, custLastName, custAddress, custEmail) VALUES ('" + custPassword
                 + "','" + custFirstName + "','" + custLastName + "','" + custAddress + "','" + custEmail + "');";
 
         try {

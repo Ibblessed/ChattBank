@@ -31,6 +31,8 @@
                 <a href="ManageAccounts?action=Deposit&id=${customer.custId}">Deposit To An Account</a><br/>
                 <a href="ManageAccounts?action=Withdraw&id=${customer.custId}">Withdraw From An Account</a><br/>
                 <a href="ManageAccounts?action=Transfer&id=${customer.custId}">Or Transfer funds</a><br/><br/><br/>
+                <p><i>Want to Add An Account To Your Portfolio?</i></p>
+                <p><a href="newAccount.jsp">Click Here</a></p>
                 Thank You For Being A Customer!
             </article>
             

@@ -17,13 +17,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Richard Davy
+ * @author AARONS
  */
-public class AccountServlet extends HttpServlet {
+public class NewAccount extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +41,10 @@ public class AccountServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AccountServlet</title>");
+            out.println("<title>Servlet NewAccount</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AccountServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewAccount at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -78,52 +77,35 @@ public class AccountServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        /*Gets the action from the url to determine the path of the page*/
-        String action = request.getParameter("action");
+        String type = request.getParameter("type");
+        Double balance = new Double(request.getParameter("balance"));
         String id = (String) request.getSession().getAttribute("id");
-        Accounts accts = new Accounts();
-        ArrayList<Account> accountList = new ArrayList();
+        ArrayList<Account> list = new ArrayList();
 
-        try {
-            accts.setCustAccounts(id);
-            accountList.addAll(accts.getCustAccounts());
-        } catch (SQLException ex) {
-            log("!" + ex);
-        }
-        if (action == null) {
+        if (balance >= 0) {
+            Account acct = new Account();
 
-            /*if null direct the page to the welcome page so that the user doesn't stumble here by accident*/
-            request.getRequestDispatcher("/Welcome.jsp").forward(request, response);
-
-        } else if (action.equals("view")) {
-
-            if (accountList.isEmpty()) {
-
-                /*If action is equal to view but no accounts are in the list we send the user to create an account*/
-                request.getRequestDispatcher("/noAccounts.jsp").forward(request, response);
-
-            } else {
-
-                /*If it equals to view we direct to the accounts.jsp to view all accounts*/
-                request.getRequestDispatcher("/accounts.jsp").forward(request, response);
-
-            }
-
-        } else if (action.equals("search")) {
-
-            if (accountList.isEmpty()) {
-
-                /*If action is equal to view but no accounts are in the list we send the user to create an account*/
-                request.getRequestDispatcher("/noAccounts.jsp").forward(request, response);
-
-            } else {
-
-                /*if directed equals search we direct to the single account lookup page*/
-                request.getRequestDispatcher("/accountLookup.jsp").forward(request, response);
-
+            /* Create the new account */
+            try {
+                acct.estabAccount(id, type, balance);
+                
+                /* Update the session list to show new accounts */
+                Accounts newList = new Accounts();
+                newList.clearAccounts();
+                newList.setCustAccounts(id);
+                list.addAll(newList.getCustAccounts());
+                request.getSession().setAttribute("acctList", list);
+                
+                /*Forward back to the account creation page*/
+                request.getRequestDispatcher("/newAccount.jsp").forward(request, response);
+                
+            } catch (SQLException ex) {
+                Logger.getLogger(NewAccount.class.getName()).log(Level.SEVERE, null, ex);
+                request.getRequestDispatcher("error.jsp").forward(request, response);
             }
 
         }
+
     }
 
     /**
